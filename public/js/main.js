@@ -7,7 +7,7 @@ button.addEventListener('click', send, false);
 
 const socket = io();
 socket.on('smsStatus', function(data){
-    res.innerHTML = `<h5>Text message send to` + data.number + `</h5>`
+    response.innerHTML = `<h5>Text message send to` +  data.number + `</h5>`
 })
 
 function send(){

@@ -6,8 +6,8 @@ const socketio = require('socket.io');
 
 //init nexmo
 const nexmo = new Nexmo({
-    apiKey : '0b7ed748',
-    apiSecret : 'Tx4L75sS5s83bmAU'
+    apiKey : 'API_KEY',
+    apiSecret : 'SECRET_KEY'
 }, {debug : true});
 
 //Init app
@@ -35,25 +35,28 @@ app.post('/', (req, res)=>{
     const text = req.body.text;
 
     nexmo.message.sendSms(
-        '919028920820', number, text, {type : 'unicode'},
+        'YOUR_REGISTER_NUMBER', number, text, {type : 'unicode'},
         (err, responseData) =>{
             if(err){
                 console.log(err);
             }
             else{
-                console.log(responseData);
                 //Get data from response
+                const {messages} = responseData;
+                const { ['message-id']: id, ['to']: number, ['error-text']: error  } = messages[0];
+                console.dir(responseData);
                 const data = {
-                    id : responseData.message[0]['message-id'],
-                    number : responseData.message[0]['to']
-                }
+                    // id : responseData.message[0]['message-id'],
+                    // number : responseData.message[0]['to']
+                    id, number, error
+                };
 
                 //emit to the client
                 io.emit('smsStatus', data);
             }
         }
-    )
-})
+    );
+});
 
 //define port
 const port = 3001;
